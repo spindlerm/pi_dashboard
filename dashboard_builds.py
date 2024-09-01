@@ -12,8 +12,8 @@ def retryable_request(url):
         'Content-Type': 'application/json',
     }
 
-    username =  config["team_city"]["username"]
-    tcPwd =  config["team_city"]["password"]
+    username = config["team_city"]["username"]
+    tcPwd = config["team_city"]["password"]
 
     tries = 0
     max_retries = 10
@@ -35,7 +35,7 @@ def retryable_request(url):
 
 
 def find_last_n_builds_of_type(config, build_Type, last_n):
-    url_template = config["team_city"]["builds_of_type_url"]
+    url_template = config["team_city"]["url_prefix"] + "/builds?locator=buildType:{0},branch:default:any&fields=build(id)".format(build_Type)
     url = url_template.format(build_Type)
     builds_xml = retryable_request(url)
 
@@ -81,7 +81,8 @@ def process_snapshot_dependencies(config, build_xml):
 
 
 def process_build(config, build_id):
-    url = config["team_city"]["build_url"].format(build_id)
+    url = config["team_city"]["url_prefix"] + "/builds/id:{0}".format(build_id)
+
     build_xml = retryable_request(url)
 
     process_snapshot_dependencies(config, build_xml)
@@ -102,4 +103,4 @@ if __name__ == "__main__":
                    "PreservicaV6_2_Master_UnitTests_AllWebApps",
                    "PreservicaV6_2_Develop_IntegrationTests_2_AllIntegrationTests"]
     for build_type in build_types:
-        process_last_n_builds_of_type(config, build_type, 1)
+        process_last_n_builds_of_type(config, build_type, config["builds"]["lastn"])
