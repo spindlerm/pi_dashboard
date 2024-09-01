@@ -67,13 +67,16 @@ def get_mysql_connection(config):
 
 def process_snapshot_dependencies(config, build_xml):
     snapshot_dependencies = build_xml.findall("snapshot-dependencies/build")
+    #Parent Build start and finish dates
     start_date = datetime.fromisoformat(build_xml.find("startDate").text).strftime("%Y-%m-%d %H:%M:%S")
+    finish_date = datetime.fromisoformat(build_xml.find("finishDate").text).strftime("%Y-%m-%d %H:%M:%S")
 
     mydb = get_mysql_connection(config)
 
     cursor = mydb.cursor()
     for build in snapshot_dependencies:
         sql = "INSERT IGNORE INTO b1 (id, number, startdate, parentBuildTypeId, buildTypeId, branch, status) VALUES (%s,%s,%s,%s,%s,%s,%s)"
+
         val = (build.get("id"), build.get("number"), start_date, build_xml.get("buildTypeId"), build.get("buildTypeId"),
                build.get("branchName"), build.get("status"))
         cursor.execute(sql, val)
