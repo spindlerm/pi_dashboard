@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS b1(
 CREATE TABLE IF NOT EXISTS jira(
 	issueKey varchar(50),
 	issuetype varchar(200),
-	summary varchar(20),
+	summary varchar(200),
 	status varchar(20),
 	fixversion varchar(50),
 	PRIMARY KEY(issueKey)
