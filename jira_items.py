@@ -51,9 +51,17 @@ def loadItems(config):
                 else:
                     fix_versions = fix_versions + "," + str(fixversion.name)
 
-            sql = "INSERT IGNORE INTO {0} (issueKey, issuetype, summary, fixversion, status) VALUES (%s,%s,%s,%s,%s)".format(config["jira"]["db_table"])
+            #sql = "INSERT INTO {0} (issueKey, issuetype, summary, fixversion, status) VALUES (%s,%s,%s,%s,%s)".format(config["jira"]["db_table"])
 
-            val = (issue.key, str(issue.get_field("issuetype")), issue.get_field("summary"), fix_versions, str(issue.get_field("status")))
+            #val = (issue.key, str(issue.get_field("issuetype")), issue.get_field("summary"), fix_versions, str(issue.get_field("status")))
+            sql = "INSERT INTO {0} (issueKey, issuetype, summary, fixversion, status) VALUES (%s,%s,%s,%s,%s) ON DUPLICATE KEY UPDATE  issuetype=%s,summary=%s,fixversion=%s,status=%s".format(config["jira"]["db_table"])
+
+            print(sql)
+
+            val = (issue.key, str(issue.get_field("issuetype")), issue.get_field("summary"), fix_versions, str(issue.get_field("status")),  str(issue.get_field("issuetype")), issue.get_field("summary"), fix_versions, str(issue.get_field("status")))
+
+
+            print(val)
             cursor.execute(sql, val)
 
     mydb.commit()
