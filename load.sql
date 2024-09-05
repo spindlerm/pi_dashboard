@@ -1,6 +1,7 @@
 use dashboard;
 drop table b1;
 drop table jira;
+drop table holidays;
 
 CREATE TABLE IF NOT EXISTS b1 (
 	id int,
@@ -22,4 +23,23 @@ CREATE TABLE IF NOT EXISTS jira  (
 	status varchar(20),
 	fixversion varchar(50),
 	PRIMARY KEY(issueKey)
+) DEFAULT  CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS teams (
+	name varchar(100),
+	manager varchar(100),
+	team varchar(20),
+	role varchar(20),
+	product varchar(20),
+	PRIMARY KEY(name,manager,team,role, product)
+)DEFAULT  CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+
+CREATE TABLE IF NOT EXISTS holidays (
+	name varchar(100),
+	author varchar(100),
+	startDate DATETIME,
+	endDate DATETIME,
+	description varchar(20),
+	PRIMARY KEY(name,author,startDate,endDate,description)
 ) DEFAULT  CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
