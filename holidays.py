@@ -83,11 +83,11 @@ def load_holidays(config, path_to_ics_file):
             if str(event.get("SUMMARY")).lower().find("holiday") != -1:
                 author = event.get("DESCRIPTION").lower()[12::]  # strip out "Created By :" from start of string
                 name = str(event.get("SUMMARY").lower())[:-10]  # strip off "- holiday" at end of string
-                print(name)
+                print(event.get("dtstart"))
 
                 description = build_description(event)
 
-                sql = "INSERT INTO {0} (author, name, startDate, endDate, description) VALUES (%s,%s,%s,%s,%s) ON DUPLICATE KEY UPDATE name=%s,author=%s,startDate=%s,endDate=%s,description=%s".format(
+                sql = "INSERT INTO {0} (author, name, startDate, endDate, description) VALUES (%s,%s,%s,%s,%s) ON DUPLICATE KEY UPDATE author=%s,name=%s,startDate=%s,endDate=%s,description=%s".format(
                     config["holidays"]["db_table"])
                 val = (author, name, event.decoded("dtstart"), event.decoded("dtend"), description,
                        author, name, event.decoded("dtstart"), event.decoded("dtend"), description)
